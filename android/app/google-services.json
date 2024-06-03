@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "615748426859",
+    "project_id": "guess-war",
+    "storage_bucket": "guess-war.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615748426859:android:d00b949ee6f65050f7e52e",
+        "android_client_info": {
+          "package_name": "com.guesswar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615748426859-2r48esvgl2l9j2dtss2dlfvoe43o63p3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFk_fGRI08SpIx6-Z0GixiJko60-jrIkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "615748426859-2r48esvgl2l9j2dtss2dlfvoe43o63p3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
