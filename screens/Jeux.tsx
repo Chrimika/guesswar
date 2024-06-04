@@ -1,11 +1,12 @@
+/* eslint-disable prettier/prettier */
 import { Button } from "@rneui/base";
-import { Image, StyleSheet, Text, View } from "react-native";
+import {  StyleSheet,  View } from "react-native";
 
-const Jeux = () => {
+export default function JeuxScreen() {
     return (
       <View style={styles.game}>
         <Button
-              title="Creer partie"
+              title="Créer partie"
               buttonStyle={{
                 backgroundColor: 'black',
                 borderWidth: 2,
@@ -19,6 +20,7 @@ const Jeux = () => {
               }}
               titleStyle={{ fontWeight: 'bold' }}
         />
+
         <Button
               title="Rejoindre partie"
               buttonStyle={{
@@ -33,12 +35,10 @@ const Jeux = () => {
                 marginVertical: 10,
               }}
               titleStyle={{ fontWeight: 'bold' }}
-            />
-
+        />
       </View>
     );
   };
-
   const styles = StyleSheet.create({
     game: {
       flex: 1,
@@ -47,5 +47,3 @@ const Jeux = () => {
       backgroundColor: '#000000',
     }
 })
-
-  export default Jeux;
