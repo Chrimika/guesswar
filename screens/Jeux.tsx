@@ -1,49 +1,49 @@
 /* eslint-disable prettier/prettier */
-import { Button } from "@rneui/base";
-import {  StyleSheet,  View } from "react-native";
+import { Button } from '@rneui/base';
+import {  StyleSheet,  View } from 'react-native';
 
 export default function JeuxScreen() {
-    return (
-      <View style={styles.game}>
-        <Button
-              title="Créer partie"
-              buttonStyle={{
-                backgroundColor: 'black',
-                borderWidth: 2,
-                borderColor: 'white',
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                width: 200,
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
-              titleStyle={{ fontWeight: 'bold' }}
-        />
+return (
+  <View style={styles.game}>
+    <Button
+          title="Créer partie"
+          buttonStyle={{
+            backgroundColor: 'black',
+            borderWidth: 2,
+            borderColor: 'white',
+            borderRadius: 30,
+          }}
+          containerStyle={{
+            width: 200,
+            marginHorizontal: 50,
+            marginVertical: 10,
+          }}
+          titleStyle={{ fontWeight: 'bold' }}
+    />
 
-        <Button
-              title="Rejoindre partie"
-              buttonStyle={{
-                backgroundColor: 'black',
-                borderWidth: 2,
-                borderColor: 'white',
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                width: 200,
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
-              titleStyle={{ fontWeight: 'bold' }}
-        />
-      </View>
-    );
-  };
+    <Button
+          title="Rejoindre partie"
+          buttonStyle={{
+            backgroundColor: 'black',
+            borderWidth: 2,
+            borderColor: 'white',
+            borderRadius: 30,
+          }}
+          containerStyle={{
+            width: 200,
+            marginHorizontal: 50,
+            marginVertical: 10,
+          }}
+          titleStyle={{ fontWeight: 'bold' }}
+    />
+  </View>
+);
+  }
   const styles = StyleSheet.create({
     game: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#000000',
-    }
-})
+    },
+});

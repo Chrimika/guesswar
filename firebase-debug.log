@@ -127,3 +127,32 @@ INFO: Detected non-HTTP/2 connection.
 [debug] [2024-06-04T10:44:50.879Z] Jun 04, 2024 11:44:50 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
  {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 04, 2024 11:44:50 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}
+[debug] [2024-06-04T21:31:37.556Z] ----------------------------------------------------------------------
+[debug] [2024-06-04T21:31:37.560Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\user\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-06-04T21:31:37.560Z] CLI Version:   13.0.3
+[debug] [2024-06-04T21:31:37.561Z] Platform:      win32
+[debug] [2024-06-04T21:31:37.561Z] Node Version:  v20.5.1
+[debug] [2024-06-04T21:31:37.561Z] Time:          Tue Jun 04 2024 22:31:37 GMT+0100 (West Africa Standard Time)
+[debug] [2024-06-04T21:31:37.561Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-06-04T21:31:37.566Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-06-04T21:31:37.763Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-06-04T21:31:37.763Z] > authorizing via signed-in user (mbachristian58@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  D:\ICT_L2\ICT_202\guesswar
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[debug] [2024-06-04T21:31:59.733Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET"}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: 
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2024-06-04T21:31:59.736Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
