@@ -26,26 +26,26 @@ export default function LoginScreen ({navigation}) {
   return auth().signInWithCredential(googleCredential);
   }
 
-    return (
-      <View style={styles.game}>
-        <Button
-              title="Login"
-              buttonStyle={{
-                backgroundColor: 'black',
-                borderWidth: 2,
-                borderColor: 'white',
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                width: 200,
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
-              titleStyle={{ fontWeight: 'bold' }}
-              onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Jeux'))}
-        />
-      </View>
-    );
+  return (
+    <View style={styles.game}>
+      <Button
+            title="Login"
+            buttonStyle={{
+              backgroundColor: 'black',
+              borderWidth: 2,
+              borderColor: 'white',
+              borderRadius: 30,
+            }}
+            containerStyle={{
+              width: 200,
+              marginHorizontal: 50,
+              marginVertical: 10,
+            }}
+            titleStyle={{ fontWeight: 'bold' }}
+            onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Jeux'))}
+      />
+    </View>
+  );
   }
   const styles = StyleSheet.create({
     game: {

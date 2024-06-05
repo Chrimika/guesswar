@@ -2,7 +2,7 @@
 import { Button } from '@rneui/base';
 import {  StyleSheet,  View } from 'react-native';
 
-export default function JeuxScreen() {
+export default function JeuxScreen({navigation}) {
 return (
   <View style={styles.game}>
     <Button
@@ -19,6 +19,7 @@ return (
             marginVertical: 10,
           }}
           titleStyle={{ fontWeight: 'bold' }}
+          onPress={()=>navigation.navigate('Creer')}
     />
 
     <Button
