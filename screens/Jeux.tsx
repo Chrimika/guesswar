@@ -1,10 +1,19 @@
 /* eslint-disable prettier/prettier */
 import { Button } from '@rneui/base';
-import {  StyleSheet,  View } from 'react-native';
+import {  StyleSheet,  Text,  View } from 'react-native';
+import { useAppContext } from '../AppContext';
+import React from 'react';
+import CircularImage from './CircularImage';
 
 export default function JeuxScreen({navigation}) {
+  const {sharedState} = useAppContext();
 return (
   <View style={styles.game}>
+    <View style={styles.info}>
+    <Text>Welcome, {sharedState.user ? sharedState.user.uname : 'Guest'}!</Text>
+    <CircularImage uri={sharedState.user.image} />
+    </View>
+    
     <Button
           title="Créer partie"
           buttonStyle={{
@@ -47,4 +56,10 @@ return (
       alignItems: 'center',
       backgroundColor: '#000000',
     },
+    info: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '10%',
+    }
 });

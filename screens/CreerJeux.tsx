@@ -1,11 +1,63 @@
 import {Button} from '@rneui/base';
 import {Text} from '@rneui/themed';
 import {StyleSheet, View, TextInput} from 'react-native';
+import {useAppContext} from '../AppContext';
+import firestore from '@react-native-firebase/firestore';
 
-export default function CreationScreen() {
+export default function CreationScreen({navigation}) {
+  const {
+    sharedState,
+    partyName,
+    setPartyName,
+    intervalMin,
+    setIntervalMin,
+    intervalMax,
+    setIntervalMax,
+    numPlayers,
+    setNumPlayers,
+  } = useAppContext();
+
+  const lancer = () => {
+    console.log('Nom de la partie:', partyName);
+    console.log('Intervale Min:', intervalMin);
+    console.log('Intervale Max:', intervalMax);
+    console.log('Nombre de joueurs:', numPlayers);
+    if (
+      partyName === '' ||
+      intervalMin === '' ||
+      intervalMax === '' ||
+      numPlayers === ''
+    ) {
+      console.log('Informations indefinie');
+    } else {
+      firestore()
+        .collection('game')
+        .add({
+          name: partyName,
+          minInterval: intervalMin,
+          maxInterval: intervalMax,
+          creatorName: sharedState.user.uname,
+          maxPlayers: numPlayers,
+          players: [sharedState.user.name],
+          joinstate: true
+        })
+        .then(() => console.log('Game registered!'));
+      navigation.navigate('Attente');
+    }
+  };
+
+  const annuler = () => {
+    setPartyName(undefined);
+    setIntervalMin(undefined);
+    setIntervalMax(undefined);
+    setNumPlayers(undefined);
+    navigation.navigate('Jeux');
+  };
+
   return (
     <View style={styles.game}>
       <Text style={styles.head}>CREATION PARTIE</Text>
+      <Text style={{color: 'white'}}>Nom partie</Text>
       <TextInput
         placeholder="Nom Partie"
         style={{
@@ -18,8 +70,11 @@ export default function CreationScreen() {
           textAlign: 'center',
           marginHorizontal: 20,
         }}
+        value={partyName}
+        onChangeText={setPartyName}
       />
-      <View style={{flexDirection: 'row', marginVertical: 50}}>
+      <Text style={{color: 'white', marginTop: '10%'}}>intervale</Text>
+      <View style={{flexDirection: 'row', marginVertical: 10}}>
         <TextInput
           placeholder="nbr_min"
           style={{
@@ -32,6 +87,8 @@ export default function CreationScreen() {
             textAlign: 'center',
           }}
           keyboardType="numeric"
+          value={intervalMin}
+          onChangeText={setIntervalMin}
         />
         <TextInput
           placeholder="nbr_max"
@@ -46,8 +103,26 @@ export default function CreationScreen() {
             marginHorizontal: 20,
           }}
           keyboardType="numeric"
+          value={intervalMax}
+          onChangeText={setIntervalMax}
         />
       </View>
+      <TextInput
+        placeholder="Nbr de joueurs"
+        style={{
+          borderRadius: 5,
+          backgroundColor: 'black',
+          color: 'gray',
+          width: '30%',
+          borderBottomColor: 'white',
+          borderBottomWidth: 1,
+          textAlign: 'center',
+          marginTop: '15%',
+        }}
+        keyboardType="numeric"
+        value={numPlayers}
+        onChangeText={setNumPlayers}
+      />
       <View style={styles.nav}>
         <Button
           title="Annuler"
@@ -63,6 +138,7 @@ export default function CreationScreen() {
             marginVertical: 10,
           }}
           titleStyle={{fontWeight: 'bold'}}
+          onPress={annuler}
         />
         <Button
           title="Lancer"
@@ -78,6 +154,7 @@ export default function CreationScreen() {
             marginVertical: 10,
           }}
           titleStyle={{fontWeight: 'bold'}}
+          onPress={lancer}
         />
       </View>
     </View>
@@ -92,11 +169,11 @@ const styles = StyleSheet.create({
   },
   nav: {
     flexDirection: 'row',
-    marginTop: '70%',
+    marginTop: '40%',
   },
   head: {
     fontSize: 32,
     color: 'white',
-    marginBottom: '20%',
+    marginVertical: '10%',
   },
 });
