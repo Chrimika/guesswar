@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
  import { Button } from '@rneui/base';
-import {  StyleSheet,  View } from 'react-native';
+import {  Image, StyleSheet,  View } from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import { useEffect } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useAppContext } from '../AppContext';
+import Toast from 'react-native-root-toast';
 
 
 export default function LoginScreen ({navigation}) {
@@ -44,9 +45,9 @@ export default function LoginScreen ({navigation}) {
     gamesplayed: 0,
     image: user.photo
    })
-   .then(()=>console.log('user added!'))
+   .then(()=> Toast.show('user added!'))
   }else{
-    console.log('User already exist')
+    Toast.show('user added!')
   }
   
   // Create a Google credential with the token
@@ -58,6 +59,10 @@ export default function LoginScreen ({navigation}) {
 
   return (
     <View style={styles.game}>
+      <Image
+        source={require('../assets/google.png')} // Assurez-vous que le chemin est correct
+        style={styles.logo}
+      />
       <Button
             title="Login"
             buttonStyle={{
@@ -83,5 +88,10 @@ export default function LoginScreen ({navigation}) {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#ffffff',
+    },
+    logo: {
+      width: 100, // Ajustez la largeur selon vos besoins
+      height: 100, // Ajustez la hauteur selon vos besoins
+      marginBottom: 20, // Ajoutez un espace entre l'image et le bouton
     },
 });

@@ -16,6 +16,10 @@ export default function CreationScreen({navigation}) {
     numPlayers,
     setNumPlayers,
   } = useAppContext();
+  const playerShow = {
+    name: '',
+    picture: ''
+  }
 
   const lancer = () => {
     console.log('Nom de la partie:', partyName);
@@ -29,6 +33,8 @@ export default function CreationScreen({navigation}) {
       numPlayers === ''
     ) {
       console.log('Informations indefinie');
+    } else if (intervalMin >= intervalMax) {
+      console.log('intervales non valide');
     } else {
       firestore()
         .collection('game')
@@ -38,8 +44,8 @@ export default function CreationScreen({navigation}) {
           maxInterval: intervalMax,
           creatorName: sharedState.user.uname,
           maxPlayers: numPlayers,
-          players: [sharedState.user.name],
-          joinstate: true
+          players: [sharedState.user.uname],
+          joinstate: true,
         })
         .then(() => console.log('Game registered!'));
       navigation.navigate('Attente');
@@ -47,10 +53,10 @@ export default function CreationScreen({navigation}) {
   };
 
   const annuler = () => {
-    setPartyName(undefined);
-    setIntervalMin(undefined);
-    setIntervalMax(undefined);
-    setNumPlayers(undefined);
+    setPartyName('');
+    setIntervalMin('');
+    setIntervalMax('');
+    setNumPlayers('');
     navigation.navigate('Jeux');
   };
 
