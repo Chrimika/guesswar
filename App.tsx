@@ -7,6 +7,7 @@ import SplashScreen from 'react-native-splash-screen';
 import CreationScreen from './screens/CreerJeux';
 import {AppProvider} from './AppContext';
 import AttenteJoueursScreen from './screens/AttenteJouers';
+import RechercheParties from './screens/RechercheParties';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ function App() {
           <Stack.Screen name="Jeux" component={JeuxScreen} />
           <Stack.Screen name="Creer" component={CreationScreen} />
           <Stack.Screen name="Attente" component={AttenteJoueursScreen} />
+          <Stack.Screen name="RechercheParties" component={RechercheParties} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppProvider>

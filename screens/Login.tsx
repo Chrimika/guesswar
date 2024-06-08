@@ -47,7 +47,7 @@ export default function LoginScreen ({navigation}) {
    })
    .then(()=> Toast.show('user added!'))
   }else{
-    Toast.show('user added!')
+    Toast.show('user already exists !')
   }
   
   // Create a Google credential with the token

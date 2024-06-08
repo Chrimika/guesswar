@@ -45,6 +45,7 @@ return (
             marginVertical: 10,
           }}
           titleStyle={{ fontWeight: 'bold' }}
+          onPress={()=>navigation.navigate('RechercheParties')}
     />
   </View>
 );
