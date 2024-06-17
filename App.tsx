@@ -8,6 +8,8 @@ import CreationScreen from './screens/CreerJeux';
 import {AppProvider} from './AppContext';
 import AttenteJoueursScreen from './screens/AttenteJouers';
 import RechercheParties from './screens/RechercheParties';
+import ChoixNbr from './screens/ChoixNbr';
+import Manche from './screens/Manche';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +28,8 @@ function App() {
           <Stack.Screen name="Creer" component={CreationScreen} />
           <Stack.Screen name="Attente" component={AttenteJoueursScreen} />
           <Stack.Screen name="RechercheParties" component={RechercheParties} />
+          <Stack.Screen name="Choix" component={ChoixNbr} />
+          <Stack.Screen name="Manche" component={Manche} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppProvider>

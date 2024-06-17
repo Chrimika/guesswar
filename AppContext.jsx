@@ -12,9 +12,10 @@ export const AppProvider = ({ children }) => {
   const [intervalMax, setIntervalMax] = useState('');
   const [numPlayers, setNumPlayers] = useState([]);
   const [players, setPlayers] = useState([]);
+  const [idGamePlay, setIdGamePlay] = useState([]);
 
   return (
-    <AppContext.Provider value={{ sharedState, setSharedState, partyName, setPartyName, intervalMin, setIntervalMin, intervalMax, setIntervalMax, numPlayers, setNumPlayers, players, setPlayers }}>
+    <AppContext.Provider value={{ sharedState, setSharedState, partyName, setPartyName, intervalMin, setIntervalMin, intervalMax, setIntervalMax, numPlayers, setNumPlayers, players, setPlayers, idGamePlay, setIdGamePlay }}>
       {children}
     </AppContext.Provider>
   );

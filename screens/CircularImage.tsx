@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 
-export default function CircularImage({uri}) {
+export default function CircularImage({ uri }) {
   return (
     <View style={styles.container}>
-      <Image source={{uri}} style={styles.image} />
+      <Image source={{ uri }} style={styles.image} />
     </View>
   );
 }
@@ -12,7 +12,7 @@ export default function CircularImage({uri}) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
     margin: 10,
   },
   image: {

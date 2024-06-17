@@ -1,10 +1,11 @@
-import {Button} from '@rneui/base';
-import {Text} from '@rneui/themed';
-import {StyleSheet, View, TextInput} from 'react-native';
-import {useAppContext} from '../AppContext';
-import firestore from '@react-native-firebase/firestore';
+import { Button } from "@rneui/base";
+import { Text } from "@rneui/themed";
+import { StyleSheet, View, TextInput } from "react-native";
+import { useAppContext } from "../AppContext";
+import firestore from "@react-native-firebase/firestore";
+import Toast from "react-native-root-toast";
 
-export default function CreationScreen({navigation}) {
+export default function CreationScreen({ navigation }) {
   const {
     sharedState,
     partyName,
@@ -15,82 +16,95 @@ export default function CreationScreen({navigation}) {
     setIntervalMax,
     numPlayers,
     setNumPlayers,
+    setIdGamePlay
   } = useAppContext();
-  const playerShow = {
-    name: '',
-    picture: ''
-  }
+
+  const isInteger = (value) => {
+    return /^[0-9]+$/.test(value);
+  };
 
   const lancer = () => {
-    console.log('Nom de la partie:', partyName);
-    console.log('Intervale Min:', intervalMin);
-    console.log('Intervale Max:', intervalMax);
-    console.log('Nombre de joueurs:', numPlayers);
+    console.log("Nom de la partie:", partyName);
+    console.log("Intervalle Min:", intervalMin);
+    console.log("Intervalle Max:", intervalMax);
+    console.log("Nombre de joueurs:", numPlayers);
+
     if (
-      partyName === '' ||
-      intervalMin === '' ||
-      intervalMax === '' ||
-      numPlayers === ''
+      partyName === "" ||
+      intervalMin === "" ||
+      intervalMax === "" ||
+      numPlayers === ""
     ) {
-      console.log('Informations indefinie');
-    } else if (intervalMin >= intervalMax) {
-      console.log('intervales non valide');
+      Toast.show("Remplissez tous les champs");
+    } else if (!isInteger(intervalMin) || !isInteger(intervalMax) || !isInteger(numPlayers)) {
+      Toast.show("Les intervalles et le nombre de joueurs doivent être des entiers");
+    } else if (parseInt(intervalMin) >= parseInt(intervalMax)) {
+      Toast.show("Les intervalles ne sont pas valides");
     } else {
       firestore()
-        .collection('game')
+        .collection("game")
         .add({
           name: partyName,
-          minInterval: intervalMin,
-          maxInterval: intervalMax,
+          minInterval: parseInt(intervalMin),
+          maxInterval: parseInt(intervalMax),
           creatorName: sharedState.user.uname,
-          maxPlayers: numPlayers,
+          maxPlayers: parseInt(numPlayers),
           players: [sharedState.user.uname],
           joinstate: true,
+          picture: sharedState.user.image,
+          choices: [],
         })
-        .then(() => console.log('Game registered!'));
-      navigation.navigate('Attente');
+        .then((docRef) => {
+          console.log("Game registered!", docRef.id);
+          setIdGamePlay(docRef.id); // Mettre à jour l'ID du jeu en cours
+          navigation.navigate("Attente");
+        })
+        .catch((error) => {
+          console.error("Error adding game: ", error);
+          Toast.show("Erreur lors de la création de la partie");
+        });
     }
   };
 
   const annuler = () => {
-    setPartyName('');
-    setIntervalMin('');
-    setIntervalMax('');
-    setNumPlayers('');
-    navigation.navigate('Jeux');
+    setPartyName("");
+    setIntervalMin("");
+    setIntervalMax("");
+    setNumPlayers("");
+    navigation.navigate("Jeux");
   };
 
   return (
     <View style={styles.game}>
       <Text style={styles.head}>CREATION PARTIE</Text>
-      <Text style={{color: 'white'}}>Nom partie</Text>
+      <Text style={{ color: "white" }}>Nom partie</Text>
       <TextInput
         placeholder="Nom Partie"
         style={{
           borderRadius: 5,
-          backgroundColor: 'black',
-          color: 'gray',
-          width: '80%',
-          borderBottomColor: 'white',
+          backgroundColor: "black",
+          color: "gray",
+          width: "80%",
+          borderBottomColor: "white",
           borderBottomWidth: 1,
-          textAlign: 'center',
+          textAlign: "center",
           marginHorizontal: 20,
         }}
         value={partyName}
         onChangeText={setPartyName}
       />
-      <Text style={{color: 'white', marginTop: '10%'}}>intervale</Text>
-      <View style={{flexDirection: 'row', marginVertical: 10}}>
+      <Text style={{ color: "white", marginTop: "10%" }}>Intervalle</Text>
+      <View style={{ flexDirection: "row", marginVertical: 10 }}>
         <TextInput
           placeholder="nbr_min"
           style={{
             borderRadius: 5,
-            backgroundColor: 'black',
-            color: 'gray',
-            width: '30%',
-            borderBottomColor: 'white',
+            backgroundColor: "black",
+            color: "gray",
+            width: "30%",
+            borderBottomColor: "white",
             borderBottomWidth: 1,
-            textAlign: 'center',
+            textAlign: "center",
           }}
           keyboardType="numeric"
           value={intervalMin}
@@ -100,12 +114,12 @@ export default function CreationScreen({navigation}) {
           placeholder="nbr_max"
           style={{
             borderRadius: 5,
-            backgroundColor: 'black',
-            color: 'gray',
-            width: '30%',
-            borderBottomColor: 'white',
+            backgroundColor: "black",
+            color: "gray",
+            width: "30%",
+            borderBottomColor: "white",
             borderBottomWidth: 1,
-            textAlign: 'center',
+            textAlign: "center",
             marginHorizontal: 20,
           }}
           keyboardType="numeric"
@@ -117,13 +131,13 @@ export default function CreationScreen({navigation}) {
         placeholder="Nbr de joueurs"
         style={{
           borderRadius: 5,
-          backgroundColor: 'black',
-          color: 'gray',
-          width: '30%',
-          borderBottomColor: 'white',
+          backgroundColor: "black",
+          color: "gray",
+          width: "30%",
+          borderBottomColor: "white",
           borderBottomWidth: 1,
-          textAlign: 'center',
-          marginTop: '15%',
+          textAlign: "center",
+          marginTop: "15%",
         }}
         keyboardType="numeric"
         value={numPlayers}
@@ -133,9 +147,9 @@ export default function CreationScreen({navigation}) {
         <Button
           title="Annuler"
           buttonStyle={{
-            backgroundColor: 'black',
+            backgroundColor: "black",
             borderWidth: 2,
-            borderColor: 'white',
+            borderColor: "white",
             borderRadius: 30,
           }}
           containerStyle={{
@@ -143,15 +157,15 @@ export default function CreationScreen({navigation}) {
             marginHorizontal: 20,
             marginVertical: 10,
           }}
-          titleStyle={{fontWeight: 'bold'}}
+          titleStyle={{ fontWeight: "bold" }}
           onPress={annuler}
         />
         <Button
           title="Lancer"
           buttonStyle={{
-            backgroundColor: 'black',
+            backgroundColor: "black",
             borderWidth: 2,
-            borderColor: 'white',
+            borderColor: "white",
             borderRadius: 30,
           }}
           containerStyle={{
@@ -159,27 +173,28 @@ export default function CreationScreen({navigation}) {
             marginHorizontal: 20,
             marginVertical: 10,
           }}
-          titleStyle={{fontWeight: 'bold'}}
+          titleStyle={{ fontWeight: "bold" }}
           onPress={lancer}
         />
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   game: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000000',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#000000",
   },
   nav: {
-    flexDirection: 'row',
-    marginTop: '40%',
+    flexDirection: "row",
+    marginTop: "40%",
   },
   head: {
     fontSize: 32,
-    color: 'white',
-    marginVertical: '10%',
+    color: "white",
+    marginVertical: "10%",
   },
 });
