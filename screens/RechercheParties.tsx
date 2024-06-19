@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,13 +8,13 @@ import {
 } from "react-native";
 import { Button } from "@rneui/base";
 import { useAppContext } from "../AppContext";
-import { useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
 import Toast from "react-native-root-toast";
 
 export default function RechercheParties({ navigation }) {
-  const { sharedState, setPartyName, setPlayers, partyName, setIdGamePlay } =
+  const { sharedState, setPartyName, setPlayers, setIdGamePlay, idGamePlay } =
     useAppContext();
+  //const [idGamePlay, setIdGamePlay] = useAppContext();
   const [games, setGames] = useState([]);
 
   useEffect(() => {
@@ -43,7 +44,6 @@ export default function RechercheParties({ navigation }) {
     try {
       const { id, players, maxPlayers, name } = game;
 
-      
       // Vérifier si le joueur existe déjà dans la partie
       if (players.includes(sharedState.user.uname)) {
         Toast.show(`User ${sharedState.user.uname} is already in the game`, {
@@ -58,9 +58,10 @@ export default function RechercheParties({ navigation }) {
         setPlayers(updatedPlayers);
       }
 
-      // Mettre à jour le partyName avec le nom du jeu
+      // Mettre à jour le partyName avec le nom du jeu et setIdGamePlay avec l'ID de la partie
       setPartyName(name);
       setIdGamePlay(id);
+      console.log(idGamePlay);
 
       if (players.length < maxPlayers) {
         // Ajouter le nom de l'utilisateur au tableau `players`
@@ -71,10 +72,12 @@ export default function RechercheParties({ navigation }) {
           .collection("game")
           .doc(id)
           .update({ players: updatedPlayers });
+
         Toast.show(`User ${sharedState.user.uname} added to game ${name}`, {
           duration: Toast.durations.LONG,
           position: Toast.positions.BOTTOM,
         });
+
         navigation.navigate("Attente");
       } else {
         Toast.show(`Game ${name} is already full`, {

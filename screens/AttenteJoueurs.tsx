@@ -61,8 +61,30 @@ export default function AttenteJoueursScreen({ navigation }) {
     };
   }, [partyName]);
 
+  async function getDocumentIdByName(collectionName, fieldName, value) {
+    try {
+      const snapshot = await firestore()
+        .collection(collectionName)
+        .where(fieldName, "==", value)
+        .get();
+
+      if (!snapshot.empty) {
+        const document = snapshot.docs[0];
+        const documentId = document.id;
+        setDocumentId(documentId);
+        return documentId;
+      } else {
+        console.log("No matching documents found.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error getting document ID by name:", error);
+    }
+  }
+
   const annuler = async () => {
     try {
+      console.log(sharedState.user.uname);
       // Récupérer l'ID du document correspondant au nom de la partie
       const docId = await getDocumentIdByName("game", "name", partyName);
       if (docId) {

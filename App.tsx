@@ -6,7 +6,7 @@ import JeuxScreen from './screens/Jeux';
 import SplashScreen from 'react-native-splash-screen';
 import CreationScreen from './screens/CreerJeux';
 import {AppProvider} from './AppContext';
-import AttenteJoueursScreen from './screens/AttenteJouers';
+import AttenteJoueursScreen from './screens/AttenteJoueurs';
 import RechercheParties from './screens/RechercheParties';
 import ChoixNbr from './screens/ChoixNbr';
 import Manche from './screens/Manche';
