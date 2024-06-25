@@ -41,8 +41,8 @@ export default function LoginScreen ({navigation}) {
    .collection("player")
    .add({
     name: user.name,
-    victoires: 0,
-    gamesplayed: 0,
+    xProposé: 0,
+    yProposé: 0,
     image: user.photo
    })
    .then(()=> Toast.show('user added!'))
@@ -77,7 +77,7 @@ export default function LoginScreen ({navigation}) {
               marginVertical: 10,
             }}
             titleStyle={{ fontWeight: 'bold' }}
-            onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Jeux'))}
+            onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Menu'))}
       />
     </View>
   );

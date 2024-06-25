@@ -6,173 +6,77 @@ import firestore from "@react-native-firebase/firestore";
 import Toast from "react-native-root-toast";
 
 export default function CreationScreen({ navigation }) {
-  const {
-    sharedState,
-    partyName,
-    setPartyName,
-    intervalMin,
-    setIntervalMin,
-    intervalMax,
-    setIntervalMax,
-    numPlayers,
-    setNumPlayers,
-    setIdGamePlay
-  } = useAppContext();
+  const { sharedState, partyName, setPartyName, numSoldats, setNumSoldats } =
+    useAppContext();
 
   const isInteger = (value) => {
     return /^[0-9]+$/.test(value);
   };
 
   const lancer = () => {
-    console.log("Nom de la partie:", partyName);
-    console.log("Intervalle Min:", intervalMin);
-    console.log("Intervalle Max:", intervalMax);
-    console.log("Nombre de joueurs:", numPlayers);
+    console.log("Nom du jeu:", partyName);
+    console.log("Nombre de soldats:", numSoldats);
 
-    if (
-      partyName === "" ||
-      intervalMin === "" ||
-      intervalMax === "" ||
-      numPlayers === ""
-    ) {
+    if (partyName === "" || numSoldats === "") {
       Toast.show("Remplissez tous les champs");
-    } else if (!isInteger(intervalMin) || !isInteger(intervalMax) || !isInteger(numPlayers)) {
-      Toast.show("Les intervalles et le nombre de joueurs doivent être des entiers");
-    } else if (parseInt(intervalMin) >= parseInt(intervalMax)) {
-      Toast.show("Les intervalles ne sont pas valides");
+    } else if (!isInteger(numSoldats)) {
+      Toast.show("Le nombre de soldats doit être un entier");
     } else {
       firestore()
-        .collection("game")
+        .collection("Jeux")
         .add({
-          name: partyName,
-          minInterval: parseInt(intervalMin),
-          maxInterval: parseInt(intervalMax),
-          creatorName: sharedState.user.uname,
-          maxPlayers: parseInt(numPlayers),
-          players: [sharedState.user.uname],
-          joinstate: true,
-          picture: sharedState.user.image,
-          choices: [],
+          nomJeux: partyName,
+          nbrSoldats: parseInt(numSoldats),
+          joueurs: [sharedState.user.uname],
+          ready: 0,
         })
         .then((docRef) => {
-          console.log("Game registered!", docRef.id);
-          setIdGamePlay(docRef.id); // Mettre à jour l'ID du jeu en cours
+          console.log("Jeu enregistré!", docRef.id);
           navigation.navigate("Attente");
         })
         .catch((error) => {
-          console.error("Error adding game: ", error);
-          Toast.show("Erreur lors de la création de la partie");
+          console.error("Erreur lors de la création du jeu: ", error);
+          Toast.show("Erreur lors de la création du jeu");
         });
     }
   };
 
   const annuler = () => {
     setPartyName("");
-    setIntervalMin("");
-    setIntervalMax("");
-    setNumPlayers("");
+    setNumSoldats("");
     navigation.navigate("Jeux");
   };
 
   return (
     <View style={styles.game}>
       <Text style={styles.head}>CREATION PARTIE</Text>
-      <Text style={{ color: "white" }}>Nom partie</Text>
+      <Text style={{ color: "white" }}>Nom du jeu</Text>
       <TextInput
-        placeholder="Nom Partie"
-        style={{
-          borderRadius: 5,
-          backgroundColor: "black",
-          color: "gray",
-          width: "80%",
-          borderBottomColor: "white",
-          borderBottomWidth: 1,
-          textAlign: "center",
-          marginHorizontal: 20,
-        }}
+        placeholder="Nom du jeu"
+        style={styles.input}
         value={partyName}
         onChangeText={setPartyName}
       />
-      <Text style={{ color: "white", marginTop: "10%" }}>Intervalle</Text>
-      <View style={{ flexDirection: "row", marginVertical: 10 }}>
-        <TextInput
-          placeholder="nbr_min"
-          style={{
-            borderRadius: 5,
-            backgroundColor: "black",
-            color: "gray",
-            width: "30%",
-            borderBottomColor: "white",
-            borderBottomWidth: 1,
-            textAlign: "center",
-          }}
-          keyboardType="numeric"
-          value={intervalMin}
-          onChangeText={setIntervalMin}
-        />
-        <TextInput
-          placeholder="nbr_max"
-          style={{
-            borderRadius: 5,
-            backgroundColor: "black",
-            color: "gray",
-            width: "30%",
-            borderBottomColor: "white",
-            borderBottomWidth: 1,
-            textAlign: "center",
-            marginHorizontal: 20,
-          }}
-          keyboardType="numeric"
-          value={intervalMax}
-          onChangeText={setIntervalMax}
-        />
-      </View>
+      <Text style={{ color: "white", marginTop: 20 }}>Nombre de soldats</Text>
       <TextInput
-        placeholder="Nbr de joueurs"
-        style={{
-          borderRadius: 5,
-          backgroundColor: "black",
-          color: "gray",
-          width: "30%",
-          borderBottomColor: "white",
-          borderBottomWidth: 1,
-          textAlign: "center",
-          marginTop: "15%",
-        }}
+        placeholder="Nombre de soldats"
+        style={styles.input}
         keyboardType="numeric"
-        value={numPlayers}
-        onChangeText={setNumPlayers}
+        value={numSoldats}
+        onChangeText={setNumSoldats}
       />
       <View style={styles.nav}>
         <Button
           title="Annuler"
-          buttonStyle={{
-            backgroundColor: "black",
-            borderWidth: 2,
-            borderColor: "white",
-            borderRadius: 30,
-          }}
-          containerStyle={{
-            width: 150,
-            marginHorizontal: 20,
-            marginVertical: 10,
-          }}
+          buttonStyle={styles.button}
+          containerStyle={styles.buttonContainer}
           titleStyle={{ fontWeight: "bold" }}
           onPress={annuler}
         />
         <Button
           title="Lancer"
-          buttonStyle={{
-            backgroundColor: "black",
-            borderWidth: 2,
-            borderColor: "white",
-            borderRadius: 30,
-          }}
-          containerStyle={{
-            width: 150,
-            marginHorizontal: 20,
-            marginVertical: 10,
-          }}
+          buttonStyle={styles.button}
+          containerStyle={styles.buttonContainer}
           titleStyle={{ fontWeight: "bold" }}
           onPress={lancer}
         />
@@ -190,11 +94,33 @@ const styles = StyleSheet.create({
   },
   nav: {
     flexDirection: "row",
-    marginTop: "40%",
+    marginTop: 40,
   },
   head: {
     fontSize: 32,
     color: "white",
-    marginVertical: "10%",
+    marginVertical: 20,
+  },
+  input: {
+    borderRadius: 5,
+    backgroundColor: "black",
+    color: "gray",
+    width: "80%",
+    borderBottomColor: "white",
+    borderBottomWidth: 1,
+    textAlign: "center",
+    marginHorizontal: 20,
+    marginTop: 10,
+  },
+  button: {
+    backgroundColor: "black",
+    borderWidth: 2,
+    borderColor: "white",
+    borderRadius: 30,
+  },
+  buttonContainer: {
+    width: 150,
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
 });

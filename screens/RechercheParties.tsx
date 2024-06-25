@@ -14,12 +14,11 @@ import Toast from "react-native-root-toast";
 export default function RechercheParties({ navigation }) {
   const { sharedState, setPartyName, setPlayers, setIdGamePlay, idGamePlay } =
     useAppContext();
-  //const [idGamePlay, setIdGamePlay] = useAppContext();
   const [games, setGames] = useState([]);
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection("game")
+      .collection("Jeux")
       .onSnapshot(
         (snapshot) => {
           const gamesList = snapshot.docs.map((doc) => ({
@@ -42,51 +41,49 @@ export default function RechercheParties({ navigation }) {
 
   const handleGamePress = async (game) => {
     try {
-      const { id, players, maxPlayers, name } = game;
+      const { id, joueurs, nomJeux } = game;
 
       // Vérifier si le joueur existe déjà dans la partie
-      if (players.includes(sharedState.user.uname)) {
-        Toast.show(`User ${sharedState.user.uname} is already in the game`, {
+      if (joueurs.includes(sharedState.user.uname)) {
+        Toast.show(`Vous faites déjà partie de la partie ${nomJeux}`, {
           duration: Toast.durations.LONG,
           position: Toast.positions.BOTTOM,
         });
+        return; // Sortir de la fonction si le joueur est déjà dans la partie
+      }
 
-        // Supprimer le joueur de la liste des joueurs
-        const updatedPlayers = players.filter(
-          (player) => player !== sharedState.user.uname
-        );
-        setPlayers(updatedPlayers);
+      // Vérifier si la partie est complète (maximum 2 joueurs)
+      if (joueurs.length >= 2) {
+        Toast.show(`La partie ${nomJeux} est déjà complète`, {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
+        return; // Sortir de la fonction si la partie est complète
       }
 
       // Mettre à jour le partyName avec le nom du jeu et setIdGamePlay avec l'ID de la partie
-      setPartyName(name);
+      setPartyName(nomJeux);
       setIdGamePlay(id);
-      console.log(idGamePlay);
 
-      if (players.length < maxPlayers) {
-        // Ajouter le nom de l'utilisateur au tableau `players`
-        const updatedPlayers = [...players, sharedState.user.uname];
+      // Ajouter le nom de l'utilisateur au tableau `joueurs`
+      const updatedPlayers = [...joueurs, sharedState.user.uname];
 
-        // Mettre à jour le document avec le nouveau tableau `players`
-        await firestore()
-          .collection("game")
-          .doc(id)
-          .update({ players: updatedPlayers });
+      // Mettre à jour le document avec le nouveau tableau `joueurs`
+      await firestore()
+        .collection("Jeux")
+        .doc(id)
+        .update({ joueurs: updatedPlayers });
 
-        Toast.show(`User ${sharedState.user.uname} added to game ${name}`, {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.BOTTOM,
-        });
+      setPlayers(updatedPlayers);
 
-        navigation.navigate("Attente");
-      } else {
-        Toast.show(`Game ${name} is already full`, {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.BOTTOM,
-        });
-      }
+      Toast.show(`Vous avez rejoint la partie ${nomJeux}`, {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+      });
+
+      navigation.navigate("Attente");
     } catch (error) {
-      Toast.show(`Error updating game: ${error.message}`, {
+      Toast.show(`Erreur lors de la mise à jour de la partie: ${error.message}`, {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
       });
@@ -110,9 +107,9 @@ export default function RechercheParties({ navigation }) {
             onPress={() => handleGamePress(game)}
             style={styles.line}
           >
-            <Text style={styles.playerName}>Nom: {game.name}</Text>
+            <Text style={styles.playerName}>Nom: {game.nomJeux}</Text>
             <Text style={styles.playerName}>
-              Max Joueurs: {game.maxPlayers}
+              Nombre de Soldats: {game.nbrSoldats}
             </Text>
           </TouchableOpacity>
         ))}
@@ -163,7 +160,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20, // Add padding at the bottom to prevent last item from being cut off
   },
   playerName: {
-    fontSize: 18,
+    fontSize: 13,
     color: "#fff",
   },
   line: {

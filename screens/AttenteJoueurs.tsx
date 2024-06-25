@@ -1,8 +1,8 @@
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, BackHandler, ScrollView } from "react-native";
 import { Button } from "@rneui/base";
 import { useAppContext } from "../AppContext";
 import CircularImage from "./CircularImage";
-import { useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
 import Toast from "react-native-root-toast";
 
@@ -13,12 +13,12 @@ export default function AttenteJoueursScreen({ navigation }) {
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection("game")
-      .where("name", "==", partyName)
+      .collection("Jeux")
+      .where("nomJeux", "==", partyName)
       .onSnapshot(async (snapshot) => {
         if (!snapshot.empty) {
           const data = snapshot.docs[0].data();
-          const playerNames = data.players;
+          const playerNames = data.joueurs;
 
           const playerPromises = playerNames.map(async (playerName) => {
             const playerDoc = await firestore()
@@ -86,14 +86,14 @@ export default function AttenteJoueursScreen({ navigation }) {
     try {
       console.log(sharedState.user.uname);
       // Récupérer l'ID du document correspondant au nom de la partie
-      const docId = await getDocumentIdByName("game", "name", partyName);
+      const docId = await getDocumentIdByName("Jeux", "nomJeux", partyName);
       if (docId) {
         // Référence au document dans Firestore
-        const documentRef = firestore().collection("game").doc(docId);
+        const documentRef = firestore().collection("Jeux").doc(docId);
 
-        // Retirer le joueur du tableau `players`
+        // Retirer le joueur du tableau `joueurs`
         await documentRef.update({
-          players: firestore.FieldValue.arrayRemove(sharedState.user.uname),
+          joueurs: firestore.FieldValue.arrayRemove(sharedState.user.uname),
         });
 
         // Naviguer vers l'écran "Jeux"
@@ -109,34 +109,18 @@ export default function AttenteJoueursScreen({ navigation }) {
       // Vérifier si l'ID du document existe
       if (documentId) {
         // Référence au document dans Firestore
-        const documentRef = firestore().collection("game").doc(documentId);
+        const documentRef = firestore().collection("Jeux").doc(documentId);
 
         // Mettre à jour l'attribut "joinstate" à false
         await documentRef.update({ joinstate: false });
+
+        // Naviguer vers l'écran "Preparatifs"
+        navigation.navigate("Preparatifs");
       }
     } catch (error) {
       Toast.show(`Error updating joinstate: ${error}`);
     }
   };
-
-  useEffect(() => {
-    // Vérifiez si la partie est lancée
-    if (documentId) {
-      const documentRef = firestore().collection("game").doc(documentId);
-
-      // Utilisez `onSnapshot` pour écouter les mises à jour du document
-      const unsubscribe = documentRef.onSnapshot((doc) => {
-        const data = doc.data();
-        // Si `joinstate` est `false`, naviguez vers l'écran "Choix"
-        if (data.joinstate === false) {
-          navigation.navigate("Choix");
-        }
-      });
-
-      // Retirez l'écouteur lorsque le composant est démonté
-      return () => unsubscribe();
-    }
-  }, [documentId]);
 
   return (
     <View style={styles.game}>

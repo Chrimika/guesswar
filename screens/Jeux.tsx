@@ -33,43 +33,46 @@ export default function JeuxScreen({ navigation }) {
   return (
     <View style={styles.game}>
       <View style={styles.info}>
-        <Text style={styles.welcomeText}>Welcome, {sharedState.user ? sharedState.user.uname : 'Guest'}!</Text>
-        <CircularImage uri={sharedState.user.image} />
+      <CircularImage uri={sharedState.user.image} />
+        <Text style={styles.welcomeText}>1 V 1</Text>
+        
       </View>
+      <View style={styles.btn}>
+        <Button
+          title="Créer partie"
+          buttonStyle={{
+            backgroundColor: 'black',
+            borderWidth: 2,
+            borderColor: 'white',
+            borderRadius: 30,
+          }}
+          containerStyle={{
+            width: 200,
+            marginHorizontal: 50,
+            marginVertical: 10,
+          }}
+          titleStyle={{ fontWeight: 'bold' }}
+          onPress={() => navigation.navigate('Creer')}
+        />
 
-      <Button
-        title="Créer partie"
-        buttonStyle={{
-          backgroundColor: 'black',
-          borderWidth: 2,
-          borderColor: 'white',
-          borderRadius: 30,
-        }}
-        containerStyle={{
-          width: 200,
-          marginHorizontal: 50,
-          marginVertical: 10,
-        }}
-        titleStyle={{ fontWeight: 'bold' }}
-        onPress={() => navigation.navigate('Creer')}
-      />
-
-      <Button
-        title="Rejoindre partie"
-        buttonStyle={{
-          backgroundColor: 'black',
-          borderWidth: 2,
-          borderColor: 'white',
-          borderRadius: 30,
-        }}
-        containerStyle={{
-          width: 200,
-          marginHorizontal: 50,
-          marginVertical: 10,
-        }}
-        titleStyle={{ fontWeight: 'bold' }}
-        onPress={() => navigation.navigate('RechercheParties')}
-      />
+        <Button
+          title="Rejoindre partie"
+          buttonStyle={{
+            backgroundColor: 'black',
+            borderWidth: 2,
+            borderColor: 'white',
+            borderRadius: 30,
+          }}
+          containerStyle={{
+            width: 200,
+            marginHorizontal: 50,
+            marginVertical: 10,
+          }}
+          titleStyle={{ fontWeight: 'bold' }}
+          onPress={() => navigation.navigate('RechercheParties')}
+        />
+      </View>
+      
     </View>
   );
 }
@@ -82,6 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
   },
   info: {
+    flex:3,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -89,7 +93,10 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 28,
     marginBottom: 10,
   },
+  btn: {
+    flex: 1,
+  }
 });
